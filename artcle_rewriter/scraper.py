@@ -47,9 +47,3 @@ class Scraper:
         self._extract_anonse()
         self._extract_article_txt()
         
-        
-
-if __name__ == "__main__":       
-    scraper = Scraper('https://www.haberturk.com/adana-da-direksiyon-sinavini-gecemeyen-kadinin-esi-ogretmenin-burnunu-kirdi-3724076')
-    scraper.extract_data()
-    print(scraper.data)
