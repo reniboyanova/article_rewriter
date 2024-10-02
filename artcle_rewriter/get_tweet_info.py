@@ -1,21 +1,9 @@
 import os
 import tweepy
+from utils.utils import get_api_key
 
-def get_token_from_file(filename):
-    try:
-        with open(filename, 'r') as file:
-            token = file.read().strip()
-            if not token:
-                raise ValueError("The token is empty")
-            return token
-    except FileNotFoundError:
-        print(f"File '{filename}' not found.")
-    except Exception as e:
-        print(f"Error reading token from file: {e}")
-
-TEST_TOKEN = get_token_from_file('./TWEET_TOKEN.txt')
+TEST_TOKEN = get_api_key('./TWEET_TOKEN.txt')
 client = tweepy.Client(bearer_token=TEST_TOKEN)
-
 
 class UserData:
     fields = {}
