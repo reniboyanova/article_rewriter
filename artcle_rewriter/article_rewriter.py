@@ -28,30 +28,64 @@ class AIRewriter:
         self.__api_key = get_api_key('./OPEN_AI_API_KET.txt')
             
         
-    def gpt_rewriter(self, max_len=4096) -> list:
+    def gpt_rewriter(self, max_len=4096) -> dict:
         client = OpenAI(api_key=self.__api_key)
         
         title = self.data.get('title', '')
         anonse = self.data.get('anonse', '')
         article_text = self.data.get('article_text', '')
         
-        results = []
+        results = {}
 
         for index, prompt in enumerate(self.prompts):
-            full_prompt = f"{prompt}\n\nTitle:\n{title}\n\nAnonse:\n{anonse}\n\nArticle text:\n{article_text}"
+            title_prompt = f"{prompt}\n\nRewrite the title:\n{title}"
+            anonse_prompt = f"{prompt}\n\nRewrite the subtitle (anonse):\n{anonse}"
+            text_prompt = f"{prompt}\n\nRewrite the article text:\n{article_text}"
 
-            chat_completion = client.chat.completions.create(
+            # Request for the rewritten title
+            chat_completion_title = client.chat.completions.create(
                 messages=[
                     {"role": "system", "content": "You are a skilled content writer who creates human-like articles."},
-                    {"role": "user", "content": full_prompt}
+                    {"role": "user", "content": title_prompt}
                 ],
                 model="gpt-4o",
                 max_tokens=max_len,
                 temperature=0.8
             )
             
-            rewritten_article = chat_completion.choices[0].message.content.strip()
-            results.append({f'Version {index}': rewritten_article})
+            rewritten_title = chat_completion_title.choices[0].message.content.strip()
+
+            # Request for the rewritten anonse
+            chat_completion_subtitle = client.chat.completions.create(
+                messages=[
+                    {"role": "system", "content": "You are a skilled content writer who creates human-like articles."},
+                    {"role": "user", "content": anonse_prompt}
+                ],
+                model="gpt-4o",
+                max_tokens=max_len,
+                temperature=0.8
+            )
+            
+            rewritten_anonse = chat_completion_subtitle.choices[0].message.content.strip()
+
+            # Request for the rewritten article text
+            chat_completion_text = client.chat.completions.create(
+                messages=[
+                    {"role": "system", "content": "You are a skilled content writer who creates human-like articles."},
+                    {"role": "user", "content": text_prompt}
+                ],
+                model="gpt-4o",
+                max_tokens=max_len,
+                temperature=0.8
+            )
+            
+            rewritten_article_text = chat_completion_text.choices[0].message.content.strip()
+            
+            results[index] = {
+                'title': rewritten_title,
+                'anonse': rewritten_anonse,
+                'text': rewritten_article_text
+            }
         
         return results
     
