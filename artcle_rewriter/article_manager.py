@@ -1,37 +1,39 @@
-from artcle_rewriter.article_rewriter import AIRewriter
+from article_rewriter import BaseRewriterManager, GPTRewriterManager
+from parsers import HTMLScraper, BaseParser, RawData
+from raw_extractor import RawExtractor
 
-class Article:
-    def __init__(self, title: str, anonse: str, text: str) -> None:
-        self.title = title
-        self.anonse = anonse
-        self.text = text
-    
+MODEL = "gpt-4o"
+OPENAI_API_KEY = "OPENAI_API_KEY"
     
 class ArticleManager:
-    def __init__(self, ai_rewr_obj: AIRewriter) -> Article:
-        if isinstance(ai_rewr_obj, AIRewriter):
-            self.ai_rewr_obj = ai_rewr_obj
-        else:
-            raise Exception(f"AI rewriter must be instance of class AIRewriter, but got: {type(ai_rewr_obj)}")
-        
+    def __init__(self, url) -> None:
+        if not url:
+            raise ValueError("Url can't be None or ''. Please provide an utl")
+        # TODO make a regex validation for all valid urls
+        self.__soup = HTMLScraper(url)
+        self.__parser = BaseParser(self.__soup)
+        self.__raw_data: RawData = self.__parser.extract_raw_data()
+        self.__rewriter_mng: dict[str, BaseRewriterManager] = {}
     
-    def trigger_rewriting(self):
-        results = self.ai_rewr_obj.gpt_rewriter()
+    
+    def trigger_raw_extracting(self) -> dict:
+        raw_extr = RawExtractor(self.__raw_data)
+        return raw_extr.extract_raw_data()
+    
+    
+    def trigger_article_write(self):
+        pass
+    
+    
+    def gpt_rewriter_manager(self):
+        gpt_rewriter_mng = GPTRewriterManager(self.__raw_data, OPENAI_API_KEY, MODEL)
+        self.__rewriter_mng['gpt-4o-rewriter'] = gpt_rewriter_mng
         
-        for result_index, data in results.items():
-            text = data.get('text', '')
-            curr_ai_score = self.ai_rewr_obj.get_ai_detection_edenai(text)
-            results[result_index]['ai_score'] = curr_ai_score
-        
-        best_result_index = min(results, key=lambda x: results[x]['ai_score']['ai_score'])
-        best_result = results[best_result_index]
-        
-        return Article(
-            title=best_result.get('title', ''),
-            anonse=best_result.get('subtitle', ''),
-            text=best_result.get('text', '')
-        )
-        
+    def trigger_rewrite_by_raw_data(self):
+        pass
+            
+       
+
         
         
         

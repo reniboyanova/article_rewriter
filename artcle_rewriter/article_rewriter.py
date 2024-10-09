@@ -1,73 +1,82 @@
+import os
 from openai import OpenAI
-from parsers import HTMLScraper, BaseParser, HubberturkParser, RawData
-from article_writer import ArticleWriter, BaseArticle
-from utils.utils import load_json, get_api_key
+from parsers import RawData
+from article_writer import BaseArticle
+from ai_detector import AIDetector
+from utils.utils import load_json
 
 PROMPTS = load_json("./prompts.json").get('prompts', [])
 
-def part_prompt(client: OpenAI, part_prompt, max_len=4096):
-    chat_completion_text = client.chat.completions.create(
+
+class Article(BaseArticle):
+    def __init__(self, title, subtitle, text, ai_score=100) -> None:
+        super().__init__(title, subtitle, text, ai_score)
+
+
+class BaseAIRewriter:
+    def __init__(self, raw_data: RawData, os_var_name: str) -> None:
+        if not isinstance(raw_data, RawData):
+            raise TypeError(f"raw_data must be of type RawData, but got {type(raw_data)}")
+        self._raw_data = raw_data
+        api_key = os.getenv(os_var_name)
+        if api_key:
+            self._api_key = api_key
+        
+    def rewrite(self) -> Article:
+        raise NotImplementedError("Method must be implemented in child class")
+    
+    
+class GPTRewriter(BaseAIRewriter):
+    def __init__(self, raw_data: RawData, os_var_name: str, model: str) -> None:
+        super().__init__(raw_data, os_var_name)
+        self.__client = OpenAI(api_key=self._api_key)
+        self.__max_len = 4096
+        self.__model = model
+            
+    def rewrite(self, content) -> Article:
+        chat_completion_text = self.__client.chat.completions.create(
         messages=[
             {"role": "system", "content": "You are a skilled content writer who creates human-like articles."},
-            {"role": "user", "content": part_prompt}
+            {"role": "user", "content": content}
                 ],
-            model="gpt-4o",
-            max_tokens=max_len,
+            model=self.__model,
+            max_tokens=self.__max_len,
             temperature=0.8
             )
             
-    return chat_completion_text.choices[0].message.content.strip()
+        return chat_completion_text.choices[0].message.content.strip()
 
+class BaseRewriterManager:
+    def __init__(self, raw_data: RawData, os_var_name: str) -> None:
+        pass
 
-class Article(BaseArticle):
-    def __init__(self, title: str, subtitle: str, article_text: str) -> None:
-        super().__init__(title, subtitle, article_text)
+   
+class GPTRewriterManager(BaseRewriterManager):
+    def __init__(self, raw_data: RawData, os_var_name: str, model: str) -> None:
+        super().__init__(raw_data, os_var_name)
+        self.gpt_rewriter = GPTRewriter(raw_data, os_var_name, model)
+        self._ai_detector = AIDetector
 
-# TODO clear class from attributes
-class AIRewriter:
-    def __init__(self, src_url, parser: BaseParser, prompts_list) -> None:
-        # Can be add some checker for valid websites with regex
-        self.__scraper = None
-        self.__data: RawData = None
+    def trigger_multiple_prompts_rewrite(self, prompt_list) -> Article:
+        data = self.gpt_rewriter._raw_data
+        index = 0
         
-        try:
-            self.__scraper =  HTMLScraper(src_url)
-        except Exception as e:
-            raise Exception(f"Error from Scraper, self.__scraper can not be set of exception: {e}")
-        
-        if self.__scraper is not None:
-            soup = self.__scraper.make_soup()
-            if not isinstance(parser, BaseParser):
-                print(f"Parser need to be instanse of BaseParser, but got {type(parser)}")
-                self.__parser = BaseParser(soup)
-            else:
-                self.__parser = parser
-        self.__data = self.__parser.extract_raw_data()
-        
-        self.prompts = prompts_list
-        if not self.prompts:
-            print("List with prompts is empty, please list at least one prompt!")
-            self.prompts = list(input())
+        while index < len(prompt_list):
+            prompt = prompt_list[index]
+            title_prompt = f"{prompt}\n\nRewrite the title:\n{data.title}"
+            anonse_prompt = f"{prompt}\n\nRewrite the subtitle (anonse):\n{data.subtitle}"
+            text_prompt = f"{prompt}\n\nRewrite the article text:\n{data.text}"
+
+            rewritten_title = self.gpt_rewriter.rewrite(title_prompt)
+            rewritten_anonse = self.gpt_rewriter.rewrite(anonse_prompt)
+            rewritten_text = self.gpt_rewriter.rewrite(text_prompt)
+
+            ai_detection_result = self._ai_detector.get_ai_detection_edenai(rewritten_text)
             
-        self.__api_key = get_api_key('./OPEN_AI_API_KEY.txt')
-            
-    # TODO make it gets RawData as param   
-    def gpt_rewriter(self) -> dict:
-        client = OpenAI(api_key=self.__api_key)
-
-        results = {}
-
-        for index, prompt in enumerate(self.prompts):
-            title_prompt = f"{prompt}\n\nRewrite the title:\n{self.__data.title}"
-            anonse_prompt = f"{prompt}\n\nRewrite the subtitle (anonse):\n{self.__data.subtitle}"
-            text_prompt = f"{prompt}\n\nRewrite the article text:\n{self.__data.text}"
-
-            results[index] = {
-                'title': part_prompt(client, title_prompt),
-                'anonse': part_prompt(client, anonse_prompt),
-                'text': part_prompt(client, text_prompt)
-            }
-        
-        return results
-    
-    
+            if "ai_score" in ai_detection_result:
+                ai_score = ai_detection_result['ai_score']
+            if ai_score < 50:
+                return Article(rewritten_title, rewritten_anonse, rewritten_text, ai_score)
+          
+            index += 1
+        return Article(rewritten_title, rewritten_anonse, rewritten_text, ai_score)

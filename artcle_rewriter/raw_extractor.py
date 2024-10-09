@@ -1,7 +1,7 @@
+import os
+import re
 from parsers import RawData, HTMLScraper, BaseParser
 from openai import OpenAI
-from utils.utils import get_api_key
-
 
 
 class RawExtractor:
@@ -9,7 +9,7 @@ class RawExtractor:
         if not isinstance(raw_data, RawData):
             raise Exception("Can not be extract data of missing RawData")
         self._raw_data = raw_data
-        self.__api_key = get_api_key('./OPEN_AI_API_KEY.txt')
+        self.__api_key = os.getenv("OPENAI_API_KEY")
         
     def extract_raw_data(self):
         client = OpenAI(api_key=self.__api_key)
@@ -38,29 +38,24 @@ class RawExtractor:
             temperature=0.8
             )
         
-        return chat_completion_text.choices[0].message.content
+        content = chat_completion_text.choices[0].message.content
+        
+        date_match = re.search(r'"date":\s*"([^"]+)"', content)
+        place_match = re.search(r'"place_of_event":\s*"([^"]+)"', content)
+        individuals_match = re.search(r'"involved_individuals":\s*\[([^\]]+)\]', content)
+        key_points_match = re.search(r'"key_points_in_news":\s*\[([^\]]+)\]', content)
+        summary_match = re.search(r'"summary":\s*"([^"]+)"', content, re.DOTALL)
+        
+        date = date_match.group(1) if date_match else None
+        place_of_event = place_match.group(1) if place_match else None
+        involved_individuals = [ind.strip().strip('"') for ind in individuals_match.group(1).split(",")] if individuals_match else []
+        key_points_in_news = [point.strip().strip('"') for point in key_points_match.group(1).split(",")] if key_points_match else []
+        summary = summary_match.group(1).replace('\\n', '\n') if summary_match else None
 
-
-if __name__ == "__main__":
-    
-    html_scraper = HTMLScraper("https://www.hurriyet.com.tr/kelebek/televizyon/ulkesini-miss-universede-temsil-edecek-iste-rusyanin-en-guzel-kizi-42555641")
-    html_scraper.make_soup()
-    parser = BaseParser(html_scraper.soup)
-    
-    raw_data = parser.extract_raw_data()
-    raw_extr = RawExtractor(raw_data)
-    print(raw_extr.extract_raw_data())
-    example_data_output  = {
-    "date": "2024-10-07",
-    "place_of_event": "Barvikha Luxury Village concert hall",
-    "involved_individuals": ["Valentina Alekseeva", "Irina Mironova", "Ulyana Evdokimova"],
-    "key_points_in_news": [
-        "Valentina Alekseeva won the Miss Russia 2024 beauty pageant.",
-        "Alekseeva will represent Russia in the 73rd Miss Universe competition.",
-        "She received a prize of 1 million rubles.",
-        "Irina Mironova was the runner-up, and Ulyana Evdokimova secured third place.",
-        "Valentina Alekseeva is a medical student at Pirogov Russian National Research Medical University."
-    ],
-    "summary": "Valentina Alekseeva, an 18-year-old from the Chuvash Republic, won the Miss Russia 2024 beauty pageant. She will represent Russia in the 73rd Miss Universe competition and received a 1 million ruble prize. The event took place at the Barvikha Luxury Village concert hall, with Irina Mironova and Ulyana Evdokimova placing second and third, respectively. Alekseeva is currently pursuing a medical degree."
-}
-    
+        return {
+            "date": date,
+            "place_of_event": place_of_event,
+            "involved_individuals": involved_individuals,
+            "key_points_in_news": key_points_in_news,
+            "summary": summary
+        }

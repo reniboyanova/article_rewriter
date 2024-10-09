@@ -1,13 +1,11 @@
+import os
 import re
 from openai import OpenAI
 from parsers import RawData
-from utils.utils import get_api_key
-
 
 class BaseArticle(RawData):
-    def __init__(self, title, subtitle, text) -> None:
-        super().__init__(title, subtitle, text)
-        self.ai_score: float = 0
+    def __init__(self, title, subtitle, text, ai_score=100) -> None:
+        super().__init__(title, subtitle, text, ai_score)
     
 
 class ArticleWriter:
@@ -15,7 +13,7 @@ class ArticleWriter:
         self.__article_summary = article_summary
 
     def write_article(self) -> BaseArticle:
-        client = OpenAI(api_key=get_api_key('./OPEN_AI_API_KEY.txt'))
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
         user_prompt = f"""  {self.__article_summary}
         Base on key-value pairs in this dictionary and web search,

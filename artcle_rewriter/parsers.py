@@ -25,10 +25,11 @@ class HTMLScraper:
             self.soup = BeautifulSoup(respons_text, 'html.parser')
 
 class RawData:
-    def __init__(self, title, subtitle, text) -> None:
+    def __init__(self, title, subtitle, text, ai_score=100) -> None:
         self.title = title
         self.subtitle = subtitle
         self.text = text
+        
         
 class BaseParser:
     def __init__(self, soup: BeautifulSoup) -> None:
