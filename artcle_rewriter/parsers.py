@@ -25,9 +25,9 @@ class HTMLScraper:
             self.soup = BeautifulSoup(respons_text, 'html.parser')
 
 class RawData:
-    def __init__(self, title, anonse, text) -> None:
+    def __init__(self, title, subtitle, text) -> None:
         self.title = title
-        self.anonse = anonse
+        self.subtitle = subtitle
         self.text = text
         
 class BaseParser:
@@ -40,7 +40,7 @@ class BaseParser:
             try:
                 json_data = json.loads(script_tag.string)
                 title = json_data.get(title_tag, '')
-                anonse = json_data.get(anonse_tag, '')
+                subtitle = json_data.get(anonse_tag, '')
                 try:
                     paragraphs = self._soup.find_all(article_body_tag)
                     article_text = ' '.join([p.get_text() for p in paragraphs])
@@ -48,7 +48,7 @@ class BaseParser:
                     print(f"Exceptions while extracting article body: {e}")
             except json.JSONDecodeError as e:
                 print(f"Error decoding json. Exception: {e}")
-        return RawData(title, anonse, article_text)
+        return RawData(title, subtitle, article_text)
 
 
 class SoscuParser(BaseParser):

@@ -1,47 +1,50 @@
-import json
+import re
 from openai import OpenAI
+from parsers import RawData
 from utils.utils import get_api_key
 
+
+class BaseArticle(RawData):
+    def __init__(self, title, subtitle, text) -> None:
+        super().__init__(title, subtitle, text)
+        self.ai_score: float = 0
+    
+
 class ArticleWriter:
-    def __init__(self, aritcle_summary) -> None:
-        self.__article_summary = aritcle_summary
-    
-    
-    def write_article(self):
+    def __init__(self, article_summary) -> None:
+        self.__article_summary = article_summary
+
+    def write_article(self) -> BaseArticle:
         client = OpenAI(api_key=get_api_key('./OPEN_AI_API_KEY.txt'))
-        
+
         user_prompt = f"""  {self.__article_summary}
-        Base on key-value pairs in this dictioanary and web search,
-        make an article whith title, subtitle and article body text.
-        Make content authentic, natural, and free from plagiarism, sound like it's writen by human.
-        Return article in dictionary with 3 keys - title, subtitle and article_text.
+        Base on key-value pairs in this dictionary and web search,
+        make an article with title, subtitle and article body text.
+        Make content authentic, natural, and free from plagiarism, sound like it's written by a human.
+        Return the article in a dictionary with 3 keys - title, subtitle, and article_text.
        """
-        
+
         chat_completion_text = client.chat.completions.create(
-        messages=[
-            {"role": "system", "content": "You are profesional article writer based on daily news."},
-            {"role": "user", "content": user_prompt}
-                ],
-            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": "You are a professional article writer based on daily news."},
+                {"role": "user", "content": user_prompt}
+            ],
+            model="gpt-4",
             max_tokens=4096,
             temperature=0.2
-            )
-        
+        )
+
         content = chat_completion_text.choices[0].message.content
         
-        if content.startswith("```") and content.endswith("```"):
-            content = content[3:-3].strip()
+        title_match = re.search(r'"title":\s*"([^"]+)"', content)
+        subtitle_match = re.search(r'"subtitle":\s*"([^"]+)"', content)
+        article_text_match = re.search(r'"article_text":\s*"([^"]+)"', content, re.DOTALL)
+
+        title = title_match.group(1) if title_match else None
+        subtitle = subtitle_match.group(1) if subtitle_match else None
+        article_text = article_text_match.group(1).replace('\\n', '\n') if article_text_match else None
         
-        try:
-            article_dict = json.loads(content)
-            article_text = article_dict.get('article_text', '')
-            formatted_article_text = f'"""\n{article_text.replace("\\n\\n", "\n\n")}\n"""'
-            article_dict['article_text'] = formatted_article_text
-            return article_dict
-        
-        except json.JSONDecodeError as e:
-            print(f"Error decoding JSON: {e}")
-            return content
+        return BaseArticle(title, subtitle, article_text)
 
 if __name__ == "__main__":
     example_data_output  = {
@@ -59,7 +62,7 @@ if __name__ == "__main__":
 }
     art_wr = ArticleWriter(example_data_output)
     
-    print(art_wr.write_article())
+    print(art_wr.write_article().__dict__)
         
         
         

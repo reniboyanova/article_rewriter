@@ -16,7 +16,7 @@ class RawExtractor:
         
         user_prompt = f"""Plese extract key points from provided news:
                 title: {self._raw_data.title}
-                subtitle: {self._raw_data.anonse}
+                subtitle: {self._raw_data.subtitle}
                 article text:{self._raw_data.text}
                 
                 Return them in dictionary as key: value pairs;
