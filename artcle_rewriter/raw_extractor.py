@@ -1,6 +1,6 @@
 import os
 import re
-from parsers import RawData, HTMLScraper, BaseParser
+from parsers import RawData
 from openai import OpenAI
 
 

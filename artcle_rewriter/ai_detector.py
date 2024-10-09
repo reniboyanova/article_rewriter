@@ -49,26 +49,3 @@ class AIDetector:
         else:
             return {"error": f"API request failed with status code {response.status_code}"}
         
-
-if __name__ == "__main__":
-    example_data_output  = {
-    "date": "2024-10-07",
-    "place_of_event": "Barvikha Luxury Village concert hall",
-    "involved_individuals": ["Valentina Alekseeva", "Irina Mironova", "Ulyana Evdokimova"],
-    "key_points_in_news": [
-        "Valentina Alekseeva won the Miss Russia 2024 beauty pageant.",
-        "Alekseeva will represent Russia in the 73rd Miss Universe competition.",
-        "She received a prize of 1 million rubles.",
-        "Irina Mironova was the runner-up, and Ulyana Evdokimova secured third place.",
-        "Valentina Alekseeva is a medical student at Pirogov Russian National Research Medical University."
-    ],
-    "summary": "Valentina Alekseeva, an 18-year-old from the Chuvash Republic, won the Miss Russia 2024 beauty pageant. She will represent Russia in the 73rd Miss Universe competition and received a 1 million ruble prize. The event took place at the Barvikha Luxury Village concert hall, with Irina Mironova and Ulyana Evdokimova placing second and third, respectively. Alekseeva is currently pursuing a medical degree."
-}
-    art_wr = ArticleWriter(example_data_output)
-    base_art = art_wr.write_article()
-    ai_d = AIDetector()
-    ai_score = ai_d.ai_detector(base_art.article_text)
-    print(f"Ai score with roberta: {ai_score}")
-    ai_score_2 = ai_d.get_ai_detection_edenai(base_art.article_text)
-    print(f"Ai score with edenapi: {ai_score_2}")
-    

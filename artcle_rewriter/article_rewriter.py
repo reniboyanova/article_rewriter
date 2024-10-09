@@ -57,7 +57,7 @@ class GPTRewriterManager(BaseRewriterManager):
         self.gpt_rewriter = GPTRewriter(raw_data, os_var_name, model)
         self._ai_detector = AIDetector
 
-    def trigger_multiple_prompts_rewrite(self, prompt_list) -> Article:
+    def trigger_multiple_prompts_rewrite(self, prompt_list=PROMPTS) -> Article:
         data = self.gpt_rewriter._raw_data
         index = 0
         

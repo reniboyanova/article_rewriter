@@ -23,12 +23,14 @@ class HTMLScraper:
         if self.soup is None:
             respons_text = self.get_response()
             self.soup = BeautifulSoup(respons_text, 'html.parser')
+        return self.soup
 
 class RawData:
     def __init__(self, title, subtitle, text, ai_score=100) -> None:
         self.title = title
         self.subtitle = subtitle
         self.text = text
+        self.ai_score = ai_score
         
         
 class BaseParser:
