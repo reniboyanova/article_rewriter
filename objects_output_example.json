@@ -1,0 +1,21 @@
+{
+    "products": [
+        {
+            "object_name": "777X",
+            "object_category": "Aircraft",
+            "object_description": "A development program by Boeing facing challenges and delays, with the first delivery expected in 2026."
+        },
+        {
+            "object_name": "767 Cargo Aircraft",
+            "object_category": "Cargo Aircraft",
+            "object_description": "A Boeing aircraft model for cargo transportation, with remaining orders to be produced and delivered by 2027."     
+        },
+        {
+            "object_name": "KC-46A Tanker",
+            "object_category": "Military Aircraft",
+            "object_description": "A military tanker aircraft produced by Boeing, with ongoing production."
+        }
+    ],
+    "artefacts": [],
+    "creative_works": []
+}

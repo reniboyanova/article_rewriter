@@ -1,0 +1,44 @@
+{
+  "locations": [
+    {
+      "location_name": "Pensilvanya",
+      "continent": "North America",
+      "country": "United States",
+      "city": "none",
+      "village": "Saylorsburg",
+      "district": "none",
+      "region": "none",
+      "facility": "none"
+    },
+    {
+      "location_name": "Saylorsburg",
+      "continent": "North America",
+      "country": "United States",
+      "city": "none",
+      "village": "Saylorsburg",
+      "district": "none",
+      "region": "none",
+      "facility": "Chestnut Retreat Center"
+    },
+    {
+      "location_name": "260 Kennel Rd.",
+      "continent": "North America",
+      "country": "United States",
+      "city": "none",
+      "village": "Saylorsburg",
+      "district": "none",
+      "region": "none",
+      "facility": "none"
+    },
+    {
+      "location_name": "Turkey",
+      "continent": "Asia/Europe",
+      "country": "Turkey",
+      "city": "none",
+      "village": "none",
+      "district": "none",
+      "region": "none",
+      "facility": "none"
+    }
+  ]
+}

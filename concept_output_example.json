@@ -1,0 +1,24 @@
+{
+    "ideas": [
+        {
+            "concept_name": "Clean Air Right",
+            "concept_short_description": "The right to live in a clean, healthy, and sustainable environment as an important component of human rights."
+        },
+        {
+            "concept_name": "Air Quality Monitoring",
+            "concept_short_description": "A system to monitor air quality, essential for assessing the quality of air breathed by the population."    
+        },
+        {
+            "concept_name": "Health Impact Assessment",
+            "concept_short_description": "A process to evaluate the health impacts of air pollution on populations."
+        }
+    ],
+    "laws": [
+        {
+            "concept_name": "National Air Quality Standards",
+            "concept_short_description": "Regulations set to define acceptable limits for air pollutants within the national context."
+        }
+    ],
+    "religions": [],
+    "ideologies": []
+}

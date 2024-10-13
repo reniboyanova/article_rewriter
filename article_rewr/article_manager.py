@@ -1,4 +1,4 @@
-from article_rewriter import BaseRewriterManager, GPTRewriterManager, Article
+from article_rewriter import GPTRewriterManager, Article
 from parsers import HTMLScraper, BaseParser, RawData
 from raw_extractor import RawExtractor
 from article_writer import ArticleWriter, BaseArticle
@@ -50,7 +50,7 @@ def main(url):
      
 
 if __name__ == "__main__":
-    main("https://www.hurriyet.com.tr/sporarena/onur-recep-kivrak-trabzonspora-kirgin-degilim-artik-yonetim-tarafinda-olmak-istiyorum-42557350")
+    main("https://www.cumhuriyet.com.tr/dunya/ikinci-intifadadan-bu-yana-bir-ilk-bati-seriada-zirhli-personel-2256336")
 
 
        
