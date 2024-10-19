@@ -1,0 +1,15 @@
+Please extract key points from provided news:
+
+title: {title}
+subtitle: {subtitle}
+article text:{text}
+
+Return them in dictionary as key: value pairs;
+I'll provide you with the key names and a description of what the value should contain (in parentheses)
+
+Keys: date (in datetime format only if exist); place_of_event (string, if exist); involved_individuals (List of names (strings))
+    key_points_in_news (A list of the most significant events from the news based on the involved individuals and their actions.
+    Based on locations and events that occurred there, and based on dates, times, and events that happened around them.)
+    summary (make a summary of provided news).
+
+If information that need to be set as a value doesn't exist set value to None;

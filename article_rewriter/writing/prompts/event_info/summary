@@ -1,0 +1,25 @@
+Instruction: Analyze the provided text and generate a concise summary that captures the main points and key information. The summary should be written in the same language as the original text.
+
+Guidelines for the summary:
+1. Focus on the main events, ideas, or facts from the text.
+2. Exclude minor details, repetitions, and examples unless they are critical to understanding the main point.
+3. Keep the summary brief and clear, ideally in 3-5 sentences, but ensure that it covers all essential information.
+4. If the text includes opinions or perspectives, ensure to distinguish them as such in the summary.
+5. The summary must be written in the same language as the original article or text.
+
+Return the result in the following format strictly as a valid JSON object:
+
+{
+  "summary": "[Generated summary of the text in the same language as the original]"
+}
+
+Example:
+
+{
+  "summary": "The text discusses the impact of climate change on coastal cities, emphasizing rising sea levels and increased storm frequency. Solutions like seawalls and renewable energy are proposed, but the text highlights challenges in policy implementation."
+}
+
+If the text lacks enough information for a proper summary, return:
+{
+  "summary": "Summary unavailable due to insufficient information."
+}

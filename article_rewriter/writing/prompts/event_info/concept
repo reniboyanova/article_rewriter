@@ -1,0 +1,49 @@
+Instruction: Analyze the text and identify all mentioned concepts. Return a single JSON object structured with the following categories:
+
+1. ideas: A list of JSON objects for each mentioned idea.
+2. laws: A list of JSON objects for each mentioned law.
+3. religions: A list of JSON objects for each mentioned religion.
+4. ideologies: A list of JSON objects for each mentioned ideology.
+
+Each JSON object should include:
+concept_name: The name of the concept.
+concept_short_description: A short, concise description of the concept based on the content of the article.
+
+Return the result in the following format:
+
+{
+  "ideas": [
+    {
+      "concept_name": "Democracy",
+      "concept_short_description": "A political system in which citizens have the power to make decisions through voting."
+    },
+    {
+      "concept_name": "Capitalism",
+      "concept_short_description": "An economic system based on private ownership and the free market."
+    }
+  ],
+  "laws": [
+    {
+      "concept_name": "Constitutional Law",
+      "concept_short_description": "A body of law that defines the role, powers, and structure of different entities within a state."
+    }
+  ],
+  "religions": [
+    {
+      "concept_name": "Christianity",
+      "concept_short_description": "A monotheistic religion based on the teachings of Jesus Christ."
+    },
+    {
+      "concept_name": "Buddhism",
+      "concept_short_description": "A religion and philosophy founded by Siddhartha Gautama, centered around enlightenment and the path to Nirvana."
+    }
+  ],
+  "ideologies": [
+    {
+      "concept_name": "Socialism",
+      "concept_short_description": "A political and economic ideology advocating for collective or governmental control of production and distribution."
+    }
+  ]
+}
+
+If any field cannot be determined, assign 'null' to that field.

@@ -1,0 +1,51 @@
+Instruction: Analyze the text and identify all mentioned entities. Return a single JSON object structured with the following categories:
+
+1. persons: A list of JSON objects for each mentioned person.
+2. organizations: A list of JSON objects for each mentioned organization.
+3. collectives: A list of JSON objects for each mentioned collective.
+4. species: A list of JSON objects for each mentioned species.
+
+Each JSON object should include:
+entity_name: The name of the entity (person, organization, collective, or species).
+main_category: The main category the entity falls under (e.g., 'Person', 'Organization', etc.).
+sub_category: A more specific classification within the main category (e.g., 'Scientist', 'Politician', 'Technology Company', etc.).
+short_entity_description: A short, concise description of the entity based on the content of the article.
+
+If any information cannot be determined, assign 'null' to that field.
+
+Return the result in the following format:
+
+{
+  "persons": [
+    {
+      "entity_name": "Albert Einstein",
+      "main_category": "Person",
+      "sub_category": "Scientist",
+      "short_entity_description": "A theoretical physicist known for the theory of relativity."
+    },
+    {
+      "entity_name": "Marie Curie",
+      "main_category": "Person",
+      "sub_category": "Scientist",
+      "short_entity_description": "A physicist and chemist who conducted pioneering research on radioactivity."
+    }
+  ],
+  "organizations": [
+    {
+      "entity_name": "Apple Inc.",
+      "main_category": "Organization",
+      "sub_category": "Technology Company",
+      "short_entity_description": "A multinational technology company specializing in consumer electronics and software."
+    },
+    {
+      "entity_name": "United Nations",
+      "main_category": "Organization",
+      "sub_category": "International Organization",
+      "short_entity_description": "An intergovernmental organization aimed at promoting international cooperation and peace."
+    }
+  ],
+  "collectives": [],
+  "species": []
+}
+
+If no entities from a category are found, return an empty list for that category (e.g., 'collectives': []).

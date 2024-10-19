@@ -1,0 +1,57 @@
+Instruction: Analyze the text and identify all mentioned objects. Return a single JSON object structured with the following categories:
+
+1. products: A list of JSON objects for each mentioned product.
+2. artefacts: A list of JSON objects for each mentioned artefact.
+3. creative_works: A list of JSON objects for each mentioned creative work.
+
+Each JSON object should include:
+object_name: The name of the object (product, artefact, or creative work).
+object_category: A more specific classification within the main category (e.g., 'painting', 'historical monument', 'sculpture', 'consumer electronics').
+object_description: A short, concise description of the object based on the content of the article.
+
+If any information cannot be determined, assign 'null' to that field.
+
+Return the result in the following format:
+
+{
+  "products": [
+    {
+      "object_name": "iPhone 14",
+      "object_category": "Smartphone",
+      "object_description": "A smartphone developed by Apple with advanced camera and processing capabilities."
+    },
+    {
+      "object_name": "Tesla Model S",
+      "object_category": "Electric Vehicle",
+      "object_description": "An electric vehicle developed by Tesla, known for its long range and performance."
+    }
+  ],
+  "artefacts": [
+    {
+      "object_name": "Rosetta Stone",
+      "object_category": "Historical Monument",
+      "object_description": "An ancient stone inscribed with a decree in three scripts, key to deciphering Egyptian hieroglyphs."
+    },
+    {
+      "object_name": "Terracotta Army",
+      "object_category": "Historical Sculpture",
+      "object_description": "A collection of terracotta sculptures depicting the armies of Qin Shi Huang, the first Emperor of China."
+    }
+  ],
+  "creative_works": [
+    {
+      "object_name": "The Starry Night",
+      "object_category": "Painting",
+      "object_description": "A famous painting by Vincent van Gogh, depicting a swirling night sky over a quiet town."
+    },
+    {
+      "object_name": "Mona Lisa",
+      "object_category": "Painting",
+      "object_description": "A portrait painting by Leonardo da Vinci, widely regarded as one of the most famous works of art in history."
+    }
+  ],
+  "artefacts": [],
+  "creative_works": []
+}
+
+If no objects from a category are found, return an empty list for that category (e.g., 'artefacts': []).

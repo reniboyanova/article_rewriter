@@ -1,0 +1,11 @@
+date: {date}
+place_of_event: {place_of_event}
+involved_individuals: {involved_individuals}
+key_points_in_news: {key_points_in_news}
+summary: {summary}
+  
+Base on key-value pairs in this dictionary and web search, make an article with title, subtitle and article body text.
+
+Make content authentic, natural, and free from plagiarism, sound like it's written by a human.
+
+Return the article in a dictionary with 3 keys - title, subtitle, and article_text.

@@ -159,3 +159,5 @@ cython_debug/
 /TWEET_TOKEN.txt
 /OPEN_AI_API_KEY.txt
 /EDENAI_API_KEY.txt
+
+.idea/

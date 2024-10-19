@@ -1,0 +1,49 @@
+Instruction: Analyze the text and identify all mentioned locations. Return a single JSON object structured with a list of locations.
+
+Each location should have the following categories:
+1. continent: The continent where the location is found.
+2. country: The country of the location.
+3. city: The city where the location is found.
+4. village: The village (if applicable).
+5. district: The district (if applicable).
+6. region: The region (if applicable).
+7. facility: The facility or specific place (if applicable).
+
+Each JSON object in the list should include:
+location_name: The name of the location.
+continent: The continent where the location is found, or 'null' if unknown.
+country: The country where the location is found, or 'null' if unknown.
+city: The city where the location is found, or 'null' if unknown.
+village: The village where the location is found, or 'null' if unknown.
+district: The district where the location is found, or 'null' if unknown.
+region: The region where the location is found, or 'null' if unknown.
+facility: The facility or specific place at the location, or 'null' if unknown.
+
+Return the result in the following format:
+
+{
+  "locations": [
+    {
+      "location_name": "Pyramids of Giza",
+      "continent": "Africa",
+      "country": "Egypt",
+      "city": "Giza",
+      "village": "null",
+      "district": "Giza Governorate",
+      "region": "null",
+      "facility": "Pyramid Complex"
+    },
+    {
+      "location_name": "Istanbul",
+      "continent": "Europe/Asia",
+      "country": "Turkey",
+      "city": "Istanbul",
+      "village": "null",
+      "district": "null",
+      "region": "Marmara Region",
+      "facility": "null"
+    }
+  ]
+}
+
+If any field cannot be determined, assign 'null' to that field.

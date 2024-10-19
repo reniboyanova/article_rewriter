@@ -1,0 +1,12 @@
+Instruction: Identify the main event from this news article and break it down into the following categories:
+
+main_event: The main event or topic of the article.
+type: The broader category the event falls under (e.g., politics, economics, etc.).
+subtype: A more specific classification within the type (e.g., parliamentary elections, economic reforms, etc.).
+description: A short, concise description of the main event based on the content of the article.
+
+Example:
+
+If the main event is 'Political elections,' the type would be 'Politics,' the subtype would be 'Parliamentary elections,' and the description would provide a brief summary based on the article.
+
+Return the result in JSON format, ensuring the information remains in the original language of the article, while the keys in the JSON file are in English.

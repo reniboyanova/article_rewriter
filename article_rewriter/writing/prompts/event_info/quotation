@@ -1,0 +1,32 @@
+Instruction: Analyze the text and identify all mentioned quotations. Return a single JSON object structured with the following categories:
+
+1. quotations: A list of JSON objects for each mentioned quotation.
+
+Each JSON object should include:
+who_said_it: The person who said or wrote the quotation.
+quotation: The actual quoted text.
+when_it_was_said_or_written: The time period or date when the quotation was said or written, or 'null' if unknown.
+
+Return the result in the following format:
+
+{
+  "quotations": [
+    {
+      "who_said_it": "Albert Einstein",
+      "quotation": "Imagination is more important than knowledge.",
+      "when_it_was_said_or_written": "1929"
+    },
+    {
+      "who_said_it": "Mahatma Gandhi",
+      "quotation": "Be the change you wish to see in the world.",
+      "when_it_was_said_or_written": null
+    },
+    {
+      "who_said_it": "Winston Churchill",
+      "quotation": "Success is not final, failure is not fatal: It is the courage to continue that counts.",
+      "when_it_was_said_or_written": "1941"
+    }
+  ]
+}
+
+If any field cannot be determined, assign 'null' to that field.
