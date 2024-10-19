@@ -14,7 +14,6 @@ DOMAIN_PARSER_MAP = {
     HABERTURK_DOMAIN: HuberturkParser,
     HURRIYET_DOMAIN: HurriyetParser,
     SOZCU_DOMAIN: SozcuParser,
-
 }
 
 

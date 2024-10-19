@@ -39,7 +39,7 @@ class SummaryExtractor:
             "summary": summary
         }
 
-    def extract_raw_data(self, raw_data: RawData) -> dict:
+    def extract_summary(self, raw_data: RawData) -> dict:
         if not isinstance(raw_data, RawData):
             raise TypeError("Can not be extract data of missing RawData")
 

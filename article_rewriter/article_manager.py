@@ -28,7 +28,7 @@ class ArticleManager:
         if raw_data is None:
             return None
 
-        summary = self._summary_extractor.extract_raw_data(raw_data)
+        summary = self._summary_extractor.extract_summary(raw_data)
         base_article = self._article_writer.write_article(summary)
         return self._rewrite_manager.write(base_article)
 
