@@ -3,7 +3,7 @@ import os
 from typing import Dict
 
 from article_rewriter.constants import *
-from article_rewriter.models import RawData
+from article_rewriter.models.models import RawData
 
 from openai import OpenAI
 

@@ -2,7 +2,7 @@ from typing import Union
 
 import json
 
-from article_rewriter.models import RawData
+from article_rewriter.models.models import RawData
 
 
 class BaseParser:

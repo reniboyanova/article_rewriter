@@ -2,7 +2,7 @@ from typing import Union
 
 from article_rewriter.writing.article_rewriter import GPTRewriterManager
 from article_rewriter.writing.article_writer import ArticleWriter
-from article_rewriter.models import Article
+from article_rewriter.models.models import Article
 from article_rewriter.feed_handlers.scraping.scraper import HTMLScraper
 from article_rewriter.writing.summary_extractor import SummaryExtractor
 from article_rewriter.writing.event_info_extractor import EventInfoExtractor

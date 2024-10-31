@@ -4,7 +4,7 @@ import re
 from openai import OpenAI
 
 from article_rewriter.constants import *
-from article_rewriter.models import BaseArticle
+from article_rewriter.models.models import BaseArticle
 
 
 class ArticleWriter:

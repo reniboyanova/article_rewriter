@@ -4,7 +4,7 @@ from typing import Union
 from openai import OpenAI
 
 from article_rewriter.constants import *
-from article_rewriter.models import Article
+from article_rewriter.models.models import Article
 from article_rewriter.writing.ai_detection.ai_detector import AIDetector
 
 
