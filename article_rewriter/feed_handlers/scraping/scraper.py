@@ -44,7 +44,7 @@ class HTMLScraper:
     def _scrape(self, source_url: str):
         soup = self._make_soup(source_url)
         parser = self._get_response_parser(source_url)
-        return parser.extract_raw_data(soup)
+        return parser.extract_raw_data(soup)    # missing method
 
     def scrape(self, source_url: str):
         try:

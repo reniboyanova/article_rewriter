@@ -1,9 +1,11 @@
 from datetime import date
 from typing import List, Dict, Union
+from components import ParsedComponent
 
 
-class Author:
-    def __init__(self, name: str, url: str):
+class Author(ParsedComponent):
+    def __init__(self, name: str, url: str, html: str):
+        super().__init__(html)
         self._name = name
         self._url = url
 
@@ -19,8 +21,9 @@ class Author:
         return self._url
 
 
-class Category:
-    def __init__(self, name: str, url: str):
+class Category(ParsedComponent):
+    def __init__(self, name: str, url: str, html: str):
+        super().__init__(html)
         self._name = name
         self._url = url
 
@@ -36,8 +39,9 @@ class Category:
         return self._url
 
 
-class Tag:
-    def __init__(self, name: str, url: str):
+class Tag(ParsedComponent):
+    def __init__(self, name: str, url: str, html: str):
+        super().__init__(html)
         self._name = name
         self._url = url
 

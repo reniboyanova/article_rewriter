@@ -1,20 +1,17 @@
-from abc import ABC, abstractmethod
+from markdownify import markdownify
 from typing import Optional, List, Dict
 
 
-class ParsedComponent(ABC):
-    @abstractmethod
-    def _to_markdown(self) -> str:
-        pass
+class ParsedComponent:
+    def __init__(self, html: str):
+        self._html = html
 
-    def _validate_markdown(self, markdown: str) -> bool:
-        return '\n\n' not in markdown
+    def _to_markdown(self) -> str:
+        return markdownify(self._html, heading_style="ATX")
 
     def to_markdown(self) -> str:
-        markdown = self._to_markdown()
-        if not self._validate_markdown(markdown):
-            raise ValueError
-        return markdown
+        return self._to_markdown()
+    
 
 
 class ParsedHeading(ParsedComponent):
@@ -64,17 +61,10 @@ class ParsedLink(ParsedComponent):
 
 
 class ParsedImage(ParsedComponent):
-    def __init__(
-            self,
-            url: str,
-            caption: Optional[str] = None,
-            description: Optional[str] = None,
-            link_url: Optional[str] = None,
-    ):
+    def __init__(self, url: str, description: Optional[str], html: str):
+        super().__init__(html)
         self._url = url
-        self._caption = caption
         self._description = description
-        self._link_url = link_url
 
     def _to_markdown(self) -> str:
         return f"![{self._description}]({self._url})"
@@ -84,33 +74,18 @@ class ParsedImage(ParsedComponent):
         return self._url
 
     @property
-    def caption(self) -> str:
-        return self._caption
-
-    @property
     def description(self) -> str:
         return self._description
 
-    @property
-    def link_url(self) -> str:
-        return self._link_url
-
 
 class ParsedVideo(ParsedComponent):
-    def __init__(
-            self,
-            url: str,
-            name: Optional[str] = None,
-            caption: Optional[str] = None,
-            description: Optional[str] = None,
-    ):
+    def __init__(self, url: str, name: Optional[str], html: str):
+        super().__init__(html)
         self._url = url
         self._name = name
-        self._caption = caption
-        self._description = description
 
     def _to_markdown(self) -> str:
-        return f"[Watch {self._name or 'video'}]({self._url})"
+        return f"[Watch {self._name}]({self._url})" if self._url else markdownify(self._html, heading_style="ATX")
 
     @property
     def url(self) -> str:
@@ -119,14 +94,6 @@ class ParsedVideo(ParsedComponent):
     @property
     def name(self) -> str:
         return self._name
-
-    @property
-    def caption(self) -> str:
-        return self._caption
-
-    @property
-    def description(self) -> str:
-        return self._description
 
 
 class ParsedEquation(ParsedComponent):
